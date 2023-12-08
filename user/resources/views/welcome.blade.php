@@ -1,1 +1,1 @@
-Welcome to the user message microservice.
+Welcome to the user microservice.

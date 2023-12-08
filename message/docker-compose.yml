@@ -42,7 +42,7 @@ services:
         container_name: message-nginx
         restart: unless-stopped
         ports:
-            - 81:80
+            - "81:80"
         volumes:
             - ./:/var/www
             - ./docker/nginx:/etc/nginx/conf.d/
