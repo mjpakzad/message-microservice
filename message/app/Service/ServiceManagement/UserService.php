@@ -4,15 +4,13 @@ namespace App\Service\ServiceManagement;
 
 use Illuminate\Support\Facades\Http;
 
-class UserService
+class UserService implements UserServiceInterface
 {
     protected array $headers = [];
 
     public function __construct()
     {
         $this->headers = [
-            'Accept' => 'application/json',
-            'Content-type' => 'application/json',
             'Authorization' => request()->headers->get('Authorization'),
         ];
     }
@@ -22,7 +20,7 @@ class UserService
      */
     public function isAuthenticated(): bool
     {
-        $response = Http::withHeaders($this->headers)->post(config('microservice.user.endpoint') . 'login');
+        $response = Http::withHeaders($this->headers)->acceptJson()->post(config('microservice.user.endpoint') . 'login');
         return $response->successful();
     }
 
@@ -31,7 +29,7 @@ class UserService
      */
     public function me(): mixed
     {
-        $response = Http::withHeaders($this->headers)->get(config('microservice.user.endpoint') . 'me');
+        $response = Http::withHeaders($this->headers)->acceptJson()->get(config('microservice.user.endpoint') . 'me');
         return $response->json();
     }
 

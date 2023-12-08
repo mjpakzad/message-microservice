@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
 Route::prefix('v1')->namespace('App\Http\Controllers\API\V1')->group(function () {
     Route::apiResource('messages', 'MessageController')->only(['index', 'store'])->middleware('user.authenticated');
 });
