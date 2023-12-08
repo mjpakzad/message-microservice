@@ -3,6 +3,14 @@ build-microservices:
 	make build-user \
 	&& make build-message
 
+setup-microservices:
+	make setup-user \
+	&& make setup-message
+
+test-microservices:
+	make test-user \
+	&& make test-message
+
 down-microservices:
 	make down-user \
 	&& make down-message
