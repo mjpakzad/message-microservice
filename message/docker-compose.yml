@@ -1,0 +1,57 @@
+version: "3.8"
+services:
+    app:
+        build:
+            args:
+                user: MP
+                uid: 1000
+            context: ./
+            dockerfile: Dockerfile
+        image: message
+        container_name: message-app
+        restart: unless-stopped
+        working_dir: /var/www/
+        volumes:
+            - ./:/var/www
+        ports:
+            - "9001:9000"
+        networks:
+            - message-net
+
+    db:
+        image: mysql:latest
+        container_name: message-db
+        restart: unless-stopped
+        tty: true
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_USER: ${DB_USERNAME}
+            SERVICE_TAGS: dev
+            SERVICE_NAME: message-mysql
+        volumes:
+            - ./docker/mysql:/var/lib/mysql
+        ports:
+            - "3307:3306"
+        networks:
+            - message-net
+
+    nginx:
+        image: nginx:alpine
+        container_name: message-nginx
+        restart: unless-stopped
+        ports:
+            - 81:80
+        volumes:
+            - ./:/var/www
+            - ./docker/nginx:/etc/nginx/conf.d/
+        depends_on:
+            - app
+            - db
+        networks:
+            - message-net
+
+networks:
+    message-net:
+        driver: bridge
